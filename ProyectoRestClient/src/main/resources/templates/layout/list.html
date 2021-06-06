@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+			xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/template :: head">
+<meta charset="utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<section th:fragment="listadoMateriales" id="materiales" style="min-height: 750px">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-11 mx-auto">
+					<div class="card border-secondary" style="min-height: 665px;">
+						<div class="card-header bg-secondary text-white">
+							<h4>[[#{material.list}]]</h4>
+						</div>
+						<div th:if="${page.page != null && !page.page.empty}">
+							<table class="table table-hover">
+								<thead class="thead-dark">
+									<tr >
+										<th class="text-center" >[[#{material.codigo}]]</th>
+										<th class="text-center" >[[#{material.nombre}]]</th>
+										<th class="text-center">[[#{material.resistencia}]]</th>
+										<th ></th>
+										<th sec:authorize="hasRole('ROLE_ADMIN')" ></th>
+										<th sec:authorize="hasRole('ROLE_ADMIN')" ></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="material : ${page.page}" >
+										<td class="text-center" th:text="${material.codigo}"></td>
+										<td class="text-justify" th:text="${material.nombre}"></td>
+										<td class="text-center" th:text="${material.resistencia}"></td>
+										<td > <a th:href="@{/pruebas/} + ${material.codigo}" class="btn btn-secondary"><i class="fas fa-vial"></i> [[#{accion.pruebas}]]</a>
+										<td sec:authorize="hasRole('ROLE_ADMIN')" ><a th:href="@{/material/update/} + ${material.codigo}" class="btn btn-secondary"><i class="fas fa-edit"></i> [[#{accion.edit}]]</a></td>
+										<td sec:authorize="hasRole('ROLE_ADMIN')" ><a th:href="@{/material/delete/} + ${material.codigo} + '/'+ ${page.pagActual-1}" class="btn btn-secondary"><i class="far fa-trash-alt"></i> [[#{accion.delete}]]</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div th:if="${page.page == null or page.page.empty}">
+							<p>[[#{material.empty}]]</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

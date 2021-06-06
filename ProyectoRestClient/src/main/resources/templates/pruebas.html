@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://wwww.thymeleaf.org/extras/spring-security">
+<head
+	th:replace="layout/template :: head(#{tittle.pruebas} + ${material.codigo})"></head>
+<body>
+	<header th:replace="layout/template :: header"></header>
+
+	<section id="actions" class="py-3 mb-3 bg-light">
+		<div class="container">
+			<div class="d-flex justify-content-between">
+				<div>
+					<a sec:authorize="hasRole('ROLE_ADMIN')"
+						th:href="@{/material/add}" class="btn btn-secondary">[[#{menu.addMaterial}]]</a>
+				</div>
+				<div>
+					<nav th:replace="layout/paginador :: paginador"></nav>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<main>
+		<div class="container card border-secondary mt-3 pt-3 col-md-6"
+			style="min-height: 297px;">
+			<h1 th:text="#{pruebas.h1} + ' ' + ${material.codigo}">[[#{pruebas.h1}]]
+			</h1>
+			<div th:if="${page.page != null && !page.page.empty}">
+				<table class="table table-hover">
+					<thead class="thead-dark">
+						<tr>
+							<th>[[#{pruebas.fecha}]]</th>
+							<th>[[#{pruebas.comentario}]]</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="prueba : ${page.page}">
+							<td th:text="${#calendars.format(prueba.fecha, 'dd/MM/yyyy')}"></td>
+							<td th:text="${prueba.comentario}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a
+								class="btn btn-secondary"
+								th:href="@{/deletePrueba/} + ${material.codigo} + '/' +  ${page.pagActual-1} + '/' + ${prueba.id}"><i
+									class="far fa-trash-alt"></i> [[#{accion.delete}]]</a>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div th:if="${page.page == null or page.page.empty}">
+				<p>[[#{pruebas.noPruebas}]]</p>
+			</div>
+		</div>
+		<div class="container mt-5">
+			<div class="col-md-7 mx-auto">
+				<div class="card border-secondary">
+					<form
+						th:action="@{/addPrueba/} + ${material.codigo} + '?page='  + ${page.pagActual-1}"
+						method="post">
+						<h2 class="card-header text-white bg-secondary">[[#{pruebas.nuevo}]]</h2>
+						<div class="p-3">
+							<div class=" form-group">
+								<label th:text="#{material.codigo}"></label> <input
+									type="hidden" name="codigo" th:field="*{material.codigo}" />
+								<label class="form-control" th:text="${material.codigo}"
+									style="border: none;"></label>
+							</div>
+							<div class="form-group">
+								<label for="fecha">[[#{pruebas.fecha}]]</label> <input
+									class="form-control" type="date" name="fecha"
+									th:field="*{prueba.fecha}" /> <small
+									class="form-text text-danger"
+									th:if="${#fields.hasErrors('prueba.fecha')}"
+									th:errors="*{prueba.fecha}"></small>
+							</div>
+							<div class="form-group mb-3">
+								<label for="comentario">[[#{pruebas.comentario}]]</label> <input
+									class="form-control" type="text" name="comentario"
+									th:field="*{prueba.comentario}" /> <small
+									class="form-text text-danger"
+									th:if="${#fields.hasErrors('prueba.comentario')}"
+									th:errors="*{prueba.comentario}"></small>
+							</div>
+							<input class="btn btn-secondary" type="submit" name="add"
+								th:value="#{accion.save}" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer th:replace="layout/template :: footer"></footer>
+</body>
+</html>

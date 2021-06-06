@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+			xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(titulo)">
+<meta charset="ISO-8859-1">
+<title>[[${titulo}]]</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}" />
+<link rel="stylesheet" th:href="@{/css/paginador.css}"/>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js}"></script>
+</head>
+<body>
+	<header th:fragment="header">
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+			<div class="container">
+				<a th:href="@{/material}" class="navbar-brand" th:text="#{plantilla.index}"></a>
+				<button class="navbar-toggler" data-toggle="collapse" data-targer="#navbarCollapse">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarCollapse">
+					<ul class="navbar-nav">
+						<li class="nav-item px-2">
+							<a th:href="@{/material}" class="nav-link active" th:text="#{barra.titulo}"></a>
+						</li>
+					</ul>
+					</div>
+					<div>
+					<ul sec:authorize="isAuthenticated()" class="navbar-nav ml-auto" >
+						<li class="nav-item mr-3">
+							<a href="#" class="nav-link">
+								<i class="fas fa-user"></i>
+								<span></span>
+								<span sec:authentication="name"></span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<form method="post" th:action="@{/logout}">
+								<a href="#" onclick="this.parentNode.submit();" class="nav-link">
+									<i class="fas fa-user-times"></i> [[#{barra.salir}]]
+								</a>
+							</form>
+						</li>
+					</ul>
+					<ul sec:authorize="!isAuthenticated()" class="navbar-nav ml-auto">
+						<li class="nav-item mr-3">
+							<a th:href="@{/login}" class="nav-link">
+								<i class="fas fa-user-circle"></i> Login
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<section id="main-header" class="py-2 bg-secondary text-white">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<h1>
+							<i class="fas fa-cog"></i> [[#{plantilla.titulo}]]
+						</h1>
+					</div>
+				</div>
+			</div>
+		</section>
+	</header>
+	
+		<section id="actions" class="py-4 mb-4 bg-light" th:fragment="actions">
+		<div class="container">
+			<div class="row">
+				<div>
+					<a  sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/material/add}"  class="btn btn-secondary">[[#{menu.addMaterial}]]</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<footer th:fragment="footer" class=" text-white bg-secondary fixed-bottom">
+		<div class="container">
+			<div class="col">
+				<p class="lead">
+					<a class="badge badge-secondary" th:href="@{?&lang=es}">[[#{menu.esLang}]]</a> |
+					<a class="badge badge-secondary" th:href="@{?(lang=en)}">[[#{menu.enLang}]]</a> |
+					<span>[[#{footer.text}]]</span>
+				</p>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>

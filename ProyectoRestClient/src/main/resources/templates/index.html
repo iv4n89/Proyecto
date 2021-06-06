@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+			xmlns:sec="http://wwww.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/template :: head(#{tittle.index})">
+<body>
+	<header th:replace="layout/template :: header"></header>
+	
+	<section id="actions" class="py-3 mb-3 bg-light" >
+		<div class="container">
+			<div class="d-flex justify-content-between">
+				<div>
+					<a  sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/material/add}" class="btn btn-secondary">[[#{menu.addMaterial}]]</a>
+					<form th:action="@{/material/byResistencia(res=${res})}"  class="btn">
+						<input type="number" step="0.1" min="0.1" th:fields="*{res}" name="res" th:value="${res}"/>
+						<input type="submit" class="btn btn-secondary"  th:value="#{menu.filtrarResistencia}" />
+					</form>
+					<a th:href="@{/material}" class="btn btn-secondary">[[#{menu.noFiltrar}]]</a>
+				</div>
+				<div>
+					<nav th:replace="layout/paginador :: paginador"></nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+		
+	<main>
+		<section th:replace="layout/list :: listadoMateriales"></section>
+	</main>
+
+	<footer th:replace="layout/template :: footer"></footer>
+</body>
+</html>

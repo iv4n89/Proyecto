@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: head(#{tittle.updateMaterial} + ${material.codigo})">
+<meta charset="utf-8">
+<title>[[#{plantilla.updateMaterial}]]</title>
+</head>
+<body>
+	<header th:replace="layout/template :: header"></header>
+	<main>
+		<div class="container mt-5">
+			<div class="col-md-7 mx-auto">
+				<div class="card border-secondary">
+					<form th:action="@{/material/update}" method="post" th:object="${material}">
+						<h2 class="card-header text-white bg-secondary">[[#{plantilla.updateMaterial}]]</h2>
+						<div class="p-3">
+							<div class=" form-group">
+								<label for="codigo">[[#{material.codigoAdd}]]:</label> 
+								<input type="hidden" name="codigo" th:value="*{codigo}" required="required" />
+								<label class="form-control" th:text="${codigo}" style="border: none"> </label>
+							</div>
+							<div class="form-group">
+								<label for="nombre">[[#{material.nombreAdd}]]: </label> 
+								<input class="form-control" type="text" name="nombre" th:field="*{nombre}" /> 
+								<small class="form-text text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+							</div>
+							<div class="form-group mb-3">
+								<label for="resistencia">[[#{material.resistenciaAdd}]]: </label> 
+								<input class="form-control" type="text" name="resistencia" th:field="*{resistencia}" min="0.1" /> 
+								<small class="form-text text-danger" th:if="${#fields.hasErrors('resistencia')}" th:errors="*{resistencia}"></small>
+							</div>
+							<input class="btn btn-secondary" type="submit" name="add" th:value="#{accion.save}" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer th:replace="layout/template :: footer"></footer>
+</body>
+</html>
